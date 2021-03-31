@@ -7,26 +7,48 @@
 
 import UIKit
 import SwiftSpinner
+import RxCocoa
+import RxSwift
 
 
-class CurrencyCounterViewController: UITableViewController {
+class CurrencyCounterViewController: UIViewController {
     
-    var currencyApiManager = CurrencyApiManager()
+    let viewModel: CurrencyCounterViewModel
+    var disposeBag = DisposeBag()
     var currency = "USD"
-    var exchangeRates: ExchangeRatesData?
     
-    override func viewDidLoad() {
-        super.viewDidLoad()
-        SwiftSpinner.show(progress: 0.2, title: "Downloading Data...")
-        currencyApiManager.performRequest(baseCurrency: currency) {data in
-            if let safeData = data {
-                self.exchangeRates = self.currencyApiManager.parseData(exchangeRatesData: safeData)
-                //reload data
-                SwiftSpinner.hide()
-            }
-        }
+    init(viewModel: CurrencyCounterViewModel) {
+        self.viewModel = viewModel
+        super.init(nibName: nil, bundle: nil)
     }
     
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
+    override func viewDidLoad() {
+        super.viewDidLoad()
+        bindActions()
+        prepareView()
+        viewModel.getData(currency: currency)
+    }
+    
+    func prepareView() {
+        view.backgroundColor = .white
+    }
+    
+    func bindActions() {
+        viewModel.shouldDisplayActivityIndicator.asObservable().subscribe { shouldShow in
+            if let shouldShow = shouldShow.element {
+                DispatchQueue.main.async {
+                    if shouldShow {
+                        SwiftSpinner.show("Loading")
+                    } else {
+                        SwiftSpinner.hide()
+                    }
+                }
+            }
+        }.disposed(by: disposeBag)
+    }
     
 }
 
