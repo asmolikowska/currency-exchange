@@ -9,11 +9,19 @@ import Foundation
 import RxSwift
 import RxCocoa
 
+enum CurrencyCounterSection {
+    case headerCounterSection
+    case currencies
+}
+
 class CurrencyCounterViewModel: PrimaryViewModel {
+    
+    
     var shouldDisplayActivityIndicator = BehaviorRelay<Bool>(value: false)
     var showErrorMessageContent = BehaviorRelay<String?>(value: nil)
     var currencyApiManager = CurrencyApiManager()
     var exchangeRatesData: ExchangeRatesData?
+    var sections: [CurrencyCounterSection] = [.headerCounterSection, .currencies]
     
     
     func getData(currency: String) {

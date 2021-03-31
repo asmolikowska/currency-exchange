@@ -1,0 +1,6 @@
+module Bond {
+  umbrella header "Bond-umbrella.h"
+
+  export *
+  module * { export * }
+}
