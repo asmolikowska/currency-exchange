@@ -18,6 +18,7 @@ class CurrencyCounterViewController: UIViewController, UITableViewDelegate {
     let currencyList = UITableView()
     let reuseId = "currencyCell"
     
+    
     init(viewModel: CurrencyCounterViewModel) {
         self.viewModel = viewModel
         super.init(nibName: nil, bundle: nil)
@@ -29,14 +30,15 @@ class CurrencyCounterViewController: UIViewController, UITableViewDelegate {
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        viewModel.getData(currency: defaultCurrency)
         bindActions()
         prepareView()
     }
     
-    override func viewWillAppear(_ animated: Bool) {
-        viewModel.getData(currency: defaultCurrency)
-        currencyList.reloadData()
-    }
+    
+//    override func viewWillAppear(_ animated: Bool) {
+//        viewModel.getData(currency: defaultCurrency)
+//    }
     
     override func loadView() {
         super.loadView()
@@ -98,18 +100,34 @@ extension CurrencyCounterViewController: UITableViewDataSource {
         case .headerCounterSection:
             return 1
         case .currencies:
-            viewModel.exchangeRatesData?.getRates()
-            return viewModel.exchangeRatesData?.rates.count ?? 4
+            return viewModel.exchangeRatesData?.getRates().count ?? 4
         }
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let cell = currencyList.dequeueReusableCell(withIdentifier: reuseId, for: indexPath)
-        cell.textLabel?.numberOfLines = 0
-        cell.textLabel?.text = "PLN"
-        return cell
+        switch viewModel.sections[indexPath.section] {
+        case .headerCounterSection:
+            let cell = UITableViewCell()
+            cell.textLabel?.text = defaultCurrency
+            return cell
+        case .currencies:
+            let cell = currencyList.dequeueReusableCell(withIdentifier: reuseId, for: indexPath)
+            cell.textLabel?.numberOfLines = 0
+            if let exchange = viewModel.exchangeRatesData {
+                cell.textLabel?.text =  exchange.getRates()[indexPath.row].currency
+            }
+            return cell
         }
-//    }
+    }
+    
+    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        switch viewModel.sections[indexPath.section] {
+        case .currencies:
+            self.navigationController?.pushViewController(CurrencyPickerViewController(viewModel: CurrencyPickerViewModel()), animated: true)
+        case _:
+            return
+        }
+    }
     
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
         switch viewModel.sections[indexPath.section] {

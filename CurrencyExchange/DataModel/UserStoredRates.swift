@@ -6,3 +6,9 @@
 //
 
 import Foundation
+
+class UserStoredRates {
+    
+    static var userStoredRates: [Rate] = []
+    
+}

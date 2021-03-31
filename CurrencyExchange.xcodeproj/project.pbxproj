@@ -18,6 +18,9 @@
 		5BB8EA912614AF53002952A4 /* Colors.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 5BB8EA902614AF53002952A4 /* Colors.xcassets */; };
 		5BB8EA982614B2AD002952A4 /* CurrencyCounterViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5BB8EA972614B2AD002952A4 /* CurrencyCounterViewModel.swift */; };
 		5BB8EAA92614C253002952A4 /* PrimaryViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5BB8EAA82614C253002952A4 /* PrimaryViewModel.swift */; };
+		5BB8EB0726152419002952A4 /* UserStoredRates.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5BB8EB0626152419002952A4 /* UserStoredRates.swift */; };
+		5BB8EB2726153302002952A4 /* CurrencyPickerViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5BB8EB2626153302002952A4 /* CurrencyPickerViewController.swift */; };
+		5BB8EB2C2615372A002952A4 /* CurrencyPickerViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5BB8EB2B2615372A002952A4 /* CurrencyPickerViewModel.swift */; };
 		A0757F5639E74BFB97B8589E /* libPods-CurrencyExchange.a in Frameworks */ = {isa = PBXBuildFile; fileRef = EC449C1855701F063292BCE3 /* libPods-CurrencyExchange.a */; };
 /* End PBXBuildFile section */
 
@@ -58,6 +61,9 @@
 		5BB8EA902614AF53002952A4 /* Colors.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Colors.xcassets; sourceTree = "<group>"; };
 		5BB8EA972614B2AD002952A4 /* CurrencyCounterViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CurrencyCounterViewModel.swift; sourceTree = "<group>"; };
 		5BB8EAA82614C253002952A4 /* PrimaryViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PrimaryViewModel.swift; sourceTree = "<group>"; };
+		5BB8EB0626152419002952A4 /* UserStoredRates.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserStoredRates.swift; sourceTree = "<group>"; };
+		5BB8EB2626153302002952A4 /* CurrencyPickerViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CurrencyPickerViewController.swift; sourceTree = "<group>"; };
+		5BB8EB2B2615372A002952A4 /* CurrencyPickerViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CurrencyPickerViewModel.swift; sourceTree = "<group>"; };
 		EC449C1855701F063292BCE3 /* libPods-CurrencyExchange.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-CurrencyExchange.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
@@ -146,6 +152,7 @@
 			children = (
 				5B2661222613B0F20010CEA1 /* CurrencyApiManager.swift */,
 				5BB8EA752613C024002952A4 /* ExchangeRatesData.swift */,
+				5BB8EB0626152419002952A4 /* UserStoredRates.swift */,
 			);
 			path = DataModel;
 			sourceTree = "<group>";
@@ -172,6 +179,7 @@
 			isa = PBXGroup;
 			children = (
 				5BB8EA972614B2AD002952A4 /* CurrencyCounterViewModel.swift */,
+				5BB8EB2B2615372A002952A4 /* CurrencyPickerViewModel.swift */,
 			);
 			path = ViewModel;
 			sourceTree = "<group>";
@@ -180,6 +188,7 @@
 			isa = PBXGroup;
 			children = (
 				5B2660EC2613AA4E0010CEA1 /* CurrencyCounterViewController.swift */,
+				5BB8EB2626153302002952A4 /* CurrencyPickerViewController.swift */,
 			);
 			path = ViewController;
 			sourceTree = "<group>";
@@ -366,8 +375,11 @@
 			buildActionMask = 2147483647;
 			files = (
 				5B2660ED2613AA4E0010CEA1 /* CurrencyCounterViewController.swift in Sources */,
+				5BB8EB2726153302002952A4 /* CurrencyPickerViewController.swift in Sources */,
 				5BB8EAA92614C253002952A4 /* PrimaryViewModel.swift in Sources */,
 				5B2661232613B0F30010CEA1 /* CurrencyApiManager.swift in Sources */,
+				5BB8EB2C2615372A002952A4 /* CurrencyPickerViewModel.swift in Sources */,
+				5BB8EB0726152419002952A4 /* UserStoredRates.swift in Sources */,
 				5BB8EA982614B2AD002952A4 /* CurrencyCounterViewModel.swift in Sources */,
 				5BB8EA762613C024002952A4 /* ExchangeRatesData.swift in Sources */,
 				5B2660E92613AA4E0010CEA1 /* AppDelegate.swift in Sources */,

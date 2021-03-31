@@ -29,7 +29,6 @@ class CurrencyCounterViewModel: PrimaryViewModel {
     var currencyApiManager = CurrencyApiManager()
     var exchangeRatesData: ExchangeRatesData?
     var sections: [CurrencyCounterSection] = [.headerCounterSection, .currencies]
-    var cellType: [CurrencyCounterCellType] = [.headerCell, .currencyCells, .addMoreButton]
     
     
     func getData(currency: String) {

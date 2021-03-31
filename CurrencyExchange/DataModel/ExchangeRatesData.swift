@@ -18,7 +18,6 @@ struct ExchangeRatesData: Decodable {
             let rate = Rate(currency: value, value: key)
             ratesArray.append(rate)
         }
-        print(ratesArray.count)
         return ratesArray
     }
 }
