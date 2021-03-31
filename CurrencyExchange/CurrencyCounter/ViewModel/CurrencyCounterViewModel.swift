@@ -14,14 +14,22 @@ enum CurrencyCounterSection {
     case currencies
 }
 
+enum CurrencyCounterCellType {
+    case headerCell
+    case currencyCells
+    case addMoreButton
+}
+
 class CurrencyCounterViewModel: PrimaryViewModel {
     
     
     var shouldDisplayActivityIndicator = BehaviorRelay<Bool>(value: false)
     var showErrorMessageContent = BehaviorRelay<String?>(value: nil)
+    var reloadLst = BehaviorRelay<Bool>(value: false)
     var currencyApiManager = CurrencyApiManager()
     var exchangeRatesData: ExchangeRatesData?
     var sections: [CurrencyCounterSection] = [.headerCounterSection, .currencies]
+    var cellType: [CurrencyCounterCellType] = [.headerCell, .currencyCells, .addMoreButton]
     
     
     func getData(currency: String) {
@@ -29,10 +37,9 @@ class CurrencyCounterViewModel: PrimaryViewModel {
         currencyApiManager.performRequest(baseCurrency: currency) {data in
             if let safeData = data {
                 self.exchangeRatesData = self.currencyApiManager.parseData(exchangeRatesData: safeData)
+                self.reloadLst.accept(true)
                 self.shouldDisplayActivityIndicator.accept(false)
             }
-            
         }
-        
     }
 }

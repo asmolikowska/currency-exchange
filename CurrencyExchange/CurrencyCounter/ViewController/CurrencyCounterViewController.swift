@@ -14,8 +14,9 @@ class CurrencyCounterViewController: UIViewController, UITableViewDelegate {
     
     let viewModel: CurrencyCounterViewModel
     var disposeBag = DisposeBag()
-    var currency = "USD"
+    var defaultCurrency = "USD"
     let currencyList = UITableView()
+    let reuseId = "currencyCell"
     
     init(viewModel: CurrencyCounterViewModel) {
         self.viewModel = viewModel
@@ -30,9 +31,11 @@ class CurrencyCounterViewController: UIViewController, UITableViewDelegate {
         super.viewDidLoad()
         bindActions()
         prepareView()
-        viewModel.getData(currency: currency)
-        currencyList.delegate = self
-        currencyList.dataSource = self
+    }
+    
+    override func viewWillAppear(_ animated: Bool) {
+        viewModel.getData(currency: defaultCurrency)
+        currencyList.reloadData()
     }
     
     override func loadView() {
@@ -42,7 +45,9 @@ class CurrencyCounterViewController: UIViewController, UITableViewDelegate {
     
     func prepareView() {
         view.backgroundColor = .white
-        currencyList.register(UITableViewCell.self, forCellReuseIdentifier: "cell")
+        currencyList.register(UITableViewCell.self, forCellReuseIdentifier: reuseId)
+        currencyList.delegate = self
+        currencyList.dataSource = self
     }
     func setupCurrencyList() {
         view.addSubview(currencyList)
@@ -56,6 +61,7 @@ class CurrencyCounterViewController: UIViewController, UITableViewDelegate {
     }
     
     func bindActions() {
+        
         viewModel.shouldDisplayActivityIndicator.asObservable().subscribe { shouldShow in
             if let shouldShow = shouldShow.element {
                 DispatchQueue.main.async {
@@ -67,24 +73,51 @@ class CurrencyCounterViewController: UIViewController, UITableViewDelegate {
                 }
             }
         }.disposed(by: disposeBag)
+        
+        viewModel.reloadLst.asObservable().subscribe { shouldReload in
+            if let shouldReload = shouldReload.element {
+                DispatchQueue.main.async {
+                    if shouldReload {
+                        self.currencyList.reloadData()
+                    }
+                }
+            }
+        }.disposed(by: disposeBag)
     }
     
 }
 
 extension CurrencyCounterViewController: UITableViewDataSource {
-    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+    
+    func numberOfSections(in tableView: UITableView) -> Int {
         viewModel.sections.count
     }
     
+    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+        switch viewModel.sections[section] {
+        case .headerCounterSection:
+            return 1
+        case .currencies:
+            viewModel.exchangeRatesData?.getRates()
+            return viewModel.exchangeRatesData?.rates.count ?? 4
+        }
+    }
+    
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let cell = UITableViewCell()
+        let cell = currencyList.dequeueReusableCell(withIdentifier: reuseId, for: indexPath)
+        cell.textLabel?.numberOfLines = 0
+        cell.textLabel?.text = "PLN"
+        return cell
+        }
+//    }
+    
+    func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
         switch viewModel.sections[indexPath.section] {
         case .headerCounterSection:
-            cell.textLabel?.text = "test"
-        case .currencies:
-            cell.textLabel?.text = "test2"
+            return 200
+        case _:
+            return 50
         }
-        return cell
     }
 }
 

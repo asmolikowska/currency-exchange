@@ -11,4 +11,19 @@ struct ExchangeRatesData: Decodable {
     let base: String
     let date: String
     let rates: [String: Decimal]
+    
+    func getRates() -> [Rate] {
+        var ratesArray: [Rate] = []
+        for (value, key) in rates {
+            let rate = Rate(currency: value, value: key)
+            ratesArray.append(rate)
+        }
+        print(ratesArray.count)
+        return ratesArray
+    }
+}
+
+struct Rate {
+    let currency: String
+    let value: Decimal
 }
