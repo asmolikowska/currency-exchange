@@ -21,7 +21,7 @@ class CurrencyCounterViewController: UIViewController, UITableViewDelegate, UITe
     
     init(viewModel: CurrencyCounterViewModel) {
         self.viewModel = viewModel
-        self.headerCell = HeaderCurrencyTableViewCell(style: .value1, reuseIdentifier: reuseId)
+        self.headerCell = HeaderCurrencyTableViewCell(style: .value1, reuseIdentifier: "headerCell")
         super.init(nibName: nil, bundle: nil)
     }
     
@@ -35,7 +35,9 @@ class CurrencyCounterViewController: UIViewController, UITableViewDelegate, UITe
         bindActions()
         prepareView()
         manageKeyboard()
+        viewModel.getData()
         viewModel.setPrimaryCurrencies()
+//        viewModel.getMatchingData()
     }
     
     func manageKeyboard() {
@@ -111,7 +113,8 @@ extension CurrencyCounterViewController: UITableViewDataSource {
         case .headerCounterSection:
             return 1
         case .currencies:
-            return viewModel.userStoredRatesData.count
+//            return viewModel.userStoredRatesData.count
+            return viewModel.exchangeRatesData?.getFilteredRates().count ?? 33
         case .addMoreCurrencies:
             return 1
         }
@@ -124,9 +127,12 @@ extension CurrencyCounterViewController: UITableViewDataSource {
             headerCell.textLabel?.font = UIFont.systemFont(ofSize: 40.0)
             return headerCell
         case .currencies:
-            let cell = currencyList.dequeueReusableCell(withIdentifier: reuseId, for: indexPath)
+            let cell = CurrencyTableViewCell(style: .value1, reuseIdentifier: reuseId)
             cell.textLabel?.numberOfLines = 0
-            cell.textLabel?.text = viewModel.userStoredRatesData[indexPath.row].rate?.currency
+            if let exchange = viewModel.exchangeRatesData {
+                cell.textLabel?.text =  exchange.getFilteredRates()[indexPath.row].currency
+                cell.detailTextLabel?.text = "\(exchange.getFilteredRates()[indexPath.row].value)"
+            }
             return cell
         case .addMoreCurrencies:
             let cell = UITableViewCell()

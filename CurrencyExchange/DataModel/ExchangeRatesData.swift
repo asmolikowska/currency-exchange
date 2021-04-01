@@ -11,7 +11,7 @@ import RealmSwift
 struct ExchangeRatesData: Decodable {
     let base: String
     let date: String
-    let rates: [String: Decimal]
+    let rates: [String: Double]
     
     func getRates() -> [Rate] {
         var ratesArray: [Rate] = []
@@ -21,11 +21,27 @@ struct ExchangeRatesData: Decodable {
         }
         return ratesArray
     }
+    
+    func getFilteredRates() -> [Rate] {
+        let rates = getRates()
+        let realm = try? Realm()
+        var filteredRates = [Rate]()
+        if let realmUnwrapped = realm {
+            for rate in rates {
+                for object in realmUnwrapped.objects(RateObject.self) {
+                    if rate.currency == object.rate?.currency {
+                        filteredRates.append(rate)
+                    }
+                }
+            }
+        }
+        return filteredRates
+    }
 }
 
 struct Rate: Codable {
     let currency: String
-    let value: Decimal
+    let value: Double
 }
 
 class RateObject : Object {

@@ -31,7 +31,7 @@ class CurrencyPickerViewController: UIViewController, UITableViewDelegate {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        viewModel.getData(currency: defaultCurrency)
+        viewModel.getData()
         bindActions()
         prepareView()
     }

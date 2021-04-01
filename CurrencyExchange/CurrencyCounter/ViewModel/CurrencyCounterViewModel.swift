@@ -27,8 +27,9 @@ class CurrencyCounterViewModel: PrimaryViewModel {
     var sections: [CurrencyCounterSection] = [.headerCounterSection , .currencies, .addMoreCurrencies]
     var userStoredRatesData = UserStoredRates.userStoredRatesData
     var reloadDefaultCurrencyCell = BehaviorRelay<Bool>(value: false)
+    var matchingData: [Rate]?
     
-    func getData(currency: String) {
+    func getData() {
         shouldDisplayActivityIndicator.accept(true)
         currencyApiManager.performRequest { data in
             if let safeData = data {
