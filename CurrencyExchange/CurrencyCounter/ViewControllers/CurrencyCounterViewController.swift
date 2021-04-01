@@ -10,17 +10,18 @@ import SwiftSpinner
 import RxSwift
 import RxCocoa
 
-class CurrencyCounterViewController: UIViewController, UITableViewDelegate {
+class CurrencyCounterViewController: UIViewController, UITableViewDelegate, UITextFieldDelegate {
     
     let viewModel: CurrencyCounterViewModel
     var disposeBag = DisposeBag()
-    var defaultCurrency = "PLN"
-    let currencyList = UITableView()
+    let currencyList = UITableView(frame: .zero, style: .grouped)
     let reuseId = "currencyCell"
+    var headerCell: HeaderCurrencyTableViewCell
     
     
     init(viewModel: CurrencyCounterViewModel) {
         self.viewModel = viewModel
+        self.headerCell = HeaderCurrencyTableViewCell(style: .value1, reuseIdentifier: reuseId)
         super.init(nibName: nil, bundle: nil)
     }
     
@@ -30,10 +31,17 @@ class CurrencyCounterViewController: UIViewController, UITableViewDelegate {
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        headerCell.currencyValue.delegate = self
         bindActions()
         prepareView()
+        manageKeyboard()
         viewModel.setPrimaryCurrencies()
-        viewModel.setDefaultCurrencyToUserDefaults(currency: defaultCurrency)
+    }
+    
+    func manageKeyboard() {
+        let tap = UITapGestureRecognizer(target: view, action: #selector(UIView.endEditing))
+        tap.cancelsTouchesInView = false
+        view.addGestureRecognizer(tap)
     }
     
     override func loadView() {
@@ -43,9 +51,10 @@ class CurrencyCounterViewController: UIViewController, UITableViewDelegate {
     
     func prepareView() {
         view.backgroundColor = .white
-        currencyList.register(UITableViewCell.self, forCellReuseIdentifier: reuseId)
+        currencyList.register(CurrencyTableViewCell.self, forCellReuseIdentifier: reuseId)
         currencyList.delegate = self
         currencyList.dataSource = self
+        self.title = "Currency Exchange Counter"
     }
     func setupCurrencyList() {
         view.addSubview(currencyList)
@@ -72,7 +81,7 @@ class CurrencyCounterViewController: UIViewController, UITableViewDelegate {
             }
         }.disposed(by: disposeBag)
         
-        viewModel.reloadLst.asObservable().subscribe { shouldReload in
+        viewModel.reloadLst.asObservable().subscribe { [unowned self] shouldReload in
             if let shouldReload = shouldReload.element {
                 DispatchQueue.main.async {
                     if shouldReload {
@@ -81,8 +90,14 @@ class CurrencyCounterViewController: UIViewController, UITableViewDelegate {
                 }
             }
         }.disposed(by: disposeBag)
-    }
-    
+                
+        headerCell.currencyValue.rx.controlEvent([.editingChanged])
+            .asObservable()
+            .subscribe(onNext: { _ in
+                print("editing state changed")
+            })
+            .disposed(by: disposeBag)
+        }
 }
 
 extension CurrencyCounterViewController: UITableViewDataSource {
@@ -105,9 +120,9 @@ extension CurrencyCounterViewController: UITableViewDataSource {
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         switch viewModel.sections[indexPath.section] {
         case .headerCounterSection:
-            let cell = UITableViewCell()
-            cell.textLabel?.text = defaultCurrency
-            return cell
+            headerCell.textLabel?.text = viewModel.getDefaultCurrencyFromUserDefaults()
+            headerCell.textLabel?.font = UIFont.systemFont(ofSize: 40.0)
+            return headerCell
         case .currencies:
             let cell = currencyList.dequeueReusableCell(withIdentifier: reuseId, for: indexPath)
             cell.textLabel?.numberOfLines = 0
@@ -116,6 +131,7 @@ extension CurrencyCounterViewController: UITableViewDataSource {
         case .addMoreCurrencies:
             let cell = UITableViewCell()
             cell.textLabel?.text = "Click here to add new currency"
+            cell.textLabel?.textAlignment = .center
             return cell
         }
     }
@@ -125,7 +141,8 @@ extension CurrencyCounterViewController: UITableViewDataSource {
         case .addMoreCurrencies:
             self.navigationController?.pushViewController(CurrencyPickerViewController(viewModel: viewModel), animated: true)
         case .currencies:
-            viewModel.setDefaultCurrencyToUserDefaults(currency: currencyList.cellForRow(at: indexPath)?.textLabel?.text ?? defaultCurrency)
+            viewModel.setDefaultCurrencyToUserDefaults(currency: currencyList.cellForRow(at: indexPath)?.textLabel?.text ?? "EUR")
+            currencyList.deselectRow(at: indexPath, animated: true)
         case _:
             return
         }
@@ -149,5 +166,21 @@ extension CurrencyCounterViewController: UITableViewDataSource {
             
         }
     }
+    
+    func tableView(_ tableView: UITableView, canEditRowAt indexPath: IndexPath) -> Bool {
+        switch viewModel.sections[indexPath.section] {
+        case .currencies:
+            return true
+        case _:
+            return false
+        }
+    }
+    
+    override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
+        headerCell.currencyValue.endEditing(true)
+        headerCell.currencyValue.resignFirstResponder()
+    }
+    
+    
 }
 

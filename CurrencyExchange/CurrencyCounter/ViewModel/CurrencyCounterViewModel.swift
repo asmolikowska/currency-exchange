@@ -26,6 +26,7 @@ class CurrencyCounterViewModel: PrimaryViewModel {
     var exchangeRatesData: ExchangeRatesData?
     var sections: [CurrencyCounterSection] = [.headerCounterSection , .currencies, .addMoreCurrencies]
     var userStoredRatesData = UserStoredRates.userStoredRatesData
+    var reloadDefaultCurrencyCell = BehaviorRelay<Bool>(value: false)
     
     func getData(currency: String) {
         shouldDisplayActivityIndicator.accept(true)
@@ -112,8 +113,21 @@ class CurrencyCounterViewModel: PrimaryViewModel {
         refresh()
     }
     
-    func setDefaultCurrencyToUserDefaults(currency: String) {
+    func setDefaultCurrencyToUserDefaults(currency: String?) {
         let defaults = UserDefaults.standard
-        defaults.set(currency, forKey: "Currency")
+        if defaults.string(forKey: "Currency") != nil {
+            defaults.set(currency, forKey: "Currency")
+        } else {
+            defaults.set("EUR", forKey: "Currency")
+        }
+        self.reloadLst.accept(true)
+    }
+    
+    func getDefaultCurrencyFromUserDefaults() -> String {
+        let defaults = UserDefaults.standard
+        if let defaultCurrency = defaults.string(forKey: "Currency") {
+            return defaultCurrency
+        }
+        return "EUR"
     }
 }
