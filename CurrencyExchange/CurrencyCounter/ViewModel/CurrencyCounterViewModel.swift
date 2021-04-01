@@ -111,4 +111,9 @@ class CurrencyCounterViewModel: PrimaryViewModel {
         }
         refresh()
     }
+    
+    func setDefaultCurrencyToUserDefaults(currency: String) {
+        let defaults = UserDefaults.standard
+        defaults.set(currency, forKey: "Currency")
+    }
 }

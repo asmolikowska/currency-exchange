@@ -14,7 +14,7 @@ class CurrencyCounterViewController: UIViewController, UITableViewDelegate {
     
     let viewModel: CurrencyCounterViewModel
     var disposeBag = DisposeBag()
-    var defaultCurrency = "USD"
+    var defaultCurrency = "PLN"
     let currencyList = UITableView()
     let reuseId = "currencyCell"
     
@@ -30,11 +30,10 @@ class CurrencyCounterViewController: UIViewController, UITableViewDelegate {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        viewModel.getData(currency: defaultCurrency)
-//        viewModel.getUserStoredRatesData()
         bindActions()
         prepareView()
         viewModel.setPrimaryCurrencies()
+        viewModel.setDefaultCurrencyToUserDefaults(currency: defaultCurrency)
     }
     
     override func loadView() {
@@ -125,6 +124,8 @@ extension CurrencyCounterViewController: UITableViewDataSource {
         switch viewModel.sections[indexPath.section] {
         case .addMoreCurrencies:
             self.navigationController?.pushViewController(CurrencyPickerViewController(viewModel: viewModel), animated: true)
+        case .currencies:
+            viewModel.setDefaultCurrencyToUserDefaults(currency: currencyList.cellForRow(at: indexPath)?.textLabel?.text ?? defaultCurrency)
         case _:
             return
         }
