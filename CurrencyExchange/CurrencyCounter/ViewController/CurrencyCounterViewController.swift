@@ -36,9 +36,9 @@ class CurrencyCounterViewController: UIViewController, UITableViewDelegate {
     }
     
     
-//    override func viewWillAppear(_ animated: Bool) {
-//        viewModel.getData(currency: defaultCurrency)
-//    }
+    //    override func viewWillAppear(_ animated: Bool) {
+    //        viewModel.getData(currency: defaultCurrency)
+    //    }
     
     override func loadView() {
         super.loadView()
@@ -101,6 +101,8 @@ extension CurrencyCounterViewController: UITableViewDataSource {
             return 1
         case .currencies:
             return viewModel.exchangeRatesData?.getRates().count ?? 4
+        case .addMoreCurrencies:
+            return 1
         }
     }
     
@@ -116,6 +118,11 @@ extension CurrencyCounterViewController: UITableViewDataSource {
             if let exchange = viewModel.exchangeRatesData {
                 cell.textLabel?.text =  exchange.getRates()[indexPath.row].currency
             }
+            
+            return cell
+        case .addMoreCurrencies:
+            let cell = UITableViewCell()
+            cell.textLabel?.text = "Click here to add new currency"
             return cell
         }
     }
@@ -133,6 +140,8 @@ extension CurrencyCounterViewController: UITableViewDataSource {
         switch viewModel.sections[indexPath.section] {
         case .headerCounterSection:
             return 200
+        case .addMoreCurrencies:
+            return 70
         case _:
             return 50
         }

@@ -15,7 +15,7 @@ class CurrencyPickerViewController: UIViewController, UITableViewDelegate {
     
     let viewModel: CurrencyPickerViewModel
     var disposeBag = DisposeBag()
-    var defaultCurrency = "USD"
+    var defaultCurrency = "PLN"
     let currencyList = UITableView()
     let reuseId = "currencyCell"
     
@@ -44,7 +44,7 @@ class CurrencyPickerViewController: UIViewController, UITableViewDelegate {
     }
     
     func prepareView() {
-        view.backgroundColor = .white
+        self.title = "Pick New Currency"
         currencyList.register(UITableViewCell.self, forCellReuseIdentifier: reuseId)
         currencyList.delegate = self
         currencyList.dataSource = self

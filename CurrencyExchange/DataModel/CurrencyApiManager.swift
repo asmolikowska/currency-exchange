@@ -9,9 +9,10 @@ import Foundation
 
 class CurrencyApiManager {
     let baseUrl = "https://api.exchangeratesapi.io/latest"
+    let apiKey = "2ae2b120476562b15785404dfee4c630"
     
     func performRequest(baseCurrency: String, completion: @escaping (Data?) -> ()) {
-        let urlString = "\(baseUrl)?base=\(baseCurrency)"
+        let urlString = "\(baseUrl)?access_key=\(apiKey)&base=\(baseCurrency)"
         if let url = URL(string: urlString) {
             let session = URLSession(configuration: .default)
             let task = session.dataTask(with: url) { (data, response, error) in
