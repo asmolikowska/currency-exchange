@@ -52,17 +52,35 @@ class CurrencyCounterViewModel: PrimaryViewModel {
     
     func saveCurrency(name: String) {
         getUserStoredRatesData()
-        //        setDefaultUserStoredData()
-        //        for object in userStoredRatesData {
-        //            if name != object.rate?.currency {
         if let realm = realm {
-            try? realm.write {
-                let rateObjectEUR = RateObject()
-                rateObjectEUR.rate = Rate(currency: name, value: 0.0)
-                realm.add(rateObjectEUR)
+            if !isAlreadyInDatabase(for: name) {
+                try? realm.write {
+                    let rateObjectEUR = RateObject()
+                    rateObjectEUR.rate = Rate(currency: name, value: 0.0)
+                    realm.add(rateObjectEUR)
+                }
             }
-            //                }
-            //            }
+        }
+        refresh()
+    }
+    
+    func isAlreadyInDatabase(for name: String) -> Bool {
+        if let realm = realm {
+            for object in realm.objects(RateObject.self) {
+                if object.rate?.currency == name {
+                    return true
+                }
+            }
+        }
+        return false
+    }
+    
+    func deleteCurrency(object: RateObject) {
+        getUserStoredRatesData()
+        if let realm = realm {
+            realm.beginWrite()
+            realm.delete(object)
+            try? realm.commitWrite()
         }
         refresh()
     }

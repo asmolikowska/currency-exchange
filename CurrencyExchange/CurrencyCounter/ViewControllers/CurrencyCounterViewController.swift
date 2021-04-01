@@ -140,5 +140,13 @@ extension CurrencyCounterViewController: UITableViewDataSource {
             return 50
         }
     }
+    
+    func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCell.EditingStyle, forRowAt indexPath: IndexPath) {
+        if editingStyle == .delete {
+            viewModel.deleteCurrency(object: viewModel.userStoredRatesData[indexPath.row])
+            currencyList.deleteRows(at: [indexPath], with: .fade)
+            
+        }
+    }
 }
 
