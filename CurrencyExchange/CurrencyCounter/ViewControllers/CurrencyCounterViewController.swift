@@ -35,9 +35,7 @@ class CurrencyCounterViewController: UIViewController, UITableViewDelegate, UITe
         bindActions()
         prepareView()
         manageKeyboard()
-        viewModel.getData()
         viewModel.setPrimaryCurrencies()
-//        viewModel.getMatchingData()
     }
     
     func manageKeyboard() {
@@ -49,6 +47,7 @@ class CurrencyCounterViewController: UIViewController, UITableViewDelegate, UITe
     override func loadView() {
         super.loadView()
         setupCurrencyList()
+        viewModel.getData()
     }
     
     func prepareView() {
@@ -92,14 +91,14 @@ class CurrencyCounterViewController: UIViewController, UITableViewDelegate, UITe
                 }
             }
         }.disposed(by: disposeBag)
-                
+        
         headerCell.currencyValue.rx.controlEvent([.editingChanged])
             .asObservable()
             .subscribe(onNext: { _ in
                 print("editing state changed")
             })
             .disposed(by: disposeBag)
-        }
+    }
 }
 
 extension CurrencyCounterViewController: UITableViewDataSource {
@@ -113,7 +112,7 @@ extension CurrencyCounterViewController: UITableViewDataSource {
         case .headerCounterSection:
             return 1
         case .currencies:
-//            return viewModel.userStoredRatesData.count
+            //            return viewModel.userStoredRatesData.count
             return viewModel.exchangeRatesData?.getFilteredRates().count ?? 33
         case .addMoreCurrencies:
             return 1
@@ -147,6 +146,8 @@ extension CurrencyCounterViewController: UITableViewDataSource {
         case .addMoreCurrencies:
             self.navigationController?.pushViewController(CurrencyPickerViewController(viewModel: viewModel), animated: true)
         case .currencies:
+            // to mozna reaktywnie
+            headerCell.textLabel?.text = currencyList.cellForRow(at: indexPath)?.textLabel?.text
             viewModel.setDefaultCurrencyToUserDefaults(currency: currencyList.cellForRow(at: indexPath)?.textLabel?.text ?? "EUR")
             currencyList.deselectRow(at: indexPath, animated: true)
         case _:

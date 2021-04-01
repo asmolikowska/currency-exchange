@@ -27,13 +27,16 @@ class CurrencyCounterViewModel: PrimaryViewModel {
     var sections: [CurrencyCounterSection] = [.headerCounterSection , .currencies, .addMoreCurrencies]
     var userStoredRatesData = UserStoredRates.userStoredRatesData
     var reloadDefaultCurrencyCell = BehaviorRelay<Bool>(value: false)
-    var matchingData: [Rate]?
+    var matchingData: ExchangeRatesData?
+    var filteredRates: [Rate]?
     
     func getData() {
         shouldDisplayActivityIndicator.accept(true)
         currencyApiManager.performRequest { data in
             if let safeData = data {
                 self.exchangeRatesData = self.currencyApiManager.parseData(exchangeRatesData: safeData)
+                self.filteredRates = self.matchingData?.getFilteredRates()
+
                 self.reloadLst.accept(true)
                 self.shouldDisplayActivityIndicator.accept(false)
             }
