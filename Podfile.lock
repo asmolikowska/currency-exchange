@@ -1,9 +1,13 @@
 PODS:
-  - Bond (7.8.1):
-    - Differ (~> 1.4)
-    - ReactiveKit (~> 3.14)
-  - Differ (1.4.5)
-  - ReactiveKit (3.17.4)
+  - ObjectMapper (3.5.3)
+  - Realm (3.21.0):
+    - Realm/Headers (= 3.21.0)
+  - Realm/Headers (3.21.0)
+  - RealmS (4.0.1):
+    - ObjectMapper (~> 3.0)
+    - RealmSwift (~> 3.0)
+  - RealmSwift (3.21.0):
+    - Realm (= 3.21.0)
   - RxCocoa (5.1.1):
     - RxRelay (~> 5)
     - RxSwift (~> 5)
@@ -13,31 +17,32 @@ PODS:
   - SwiftSpinner (2.2.0)
 
 DEPENDENCIES:
-  - Bond
-  - ReactiveKit
+  - RealmS (~> 4.0.0)
   - RxCocoa (~> 5)
   - RxSwift (~> 5)
   - SwiftSpinner
 
 SPEC REPOS:
   trunk:
-    - Bond
-    - Differ
-    - ReactiveKit
+    - ObjectMapper
+    - Realm
+    - RealmS
+    - RealmSwift
     - RxCocoa
     - RxRelay
     - RxSwift
     - SwiftSpinner
 
 SPEC CHECKSUMS:
-  Bond: 87075c7f20f37ea3e73dc7057fce839787bf46eb
-  Differ: 3b6bd78e2b20cc795d9a86f7641d087524e4273e
-  ReactiveKit: f9f9e079efa39312c597bf1508ef4810d111ce76
+  ObjectMapper: 97111c97e054a6ee25917662106689f0b4127b37
+  Realm: 38e9dcb19104b58407167d99f70d4995f7c16023
+  RealmS: a5ce0e34359676b6d52778dab92c4e36b779bbd9
+  RealmSwift: 3183cc1ad48378fbcd634311b22c0e6c44021152
   RxCocoa: 32065309a38d29b5b0db858819b5bf9ef038b601
   RxRelay: d77f7d771495f43c556cbc43eebd1bb54d01e8e9
   RxSwift: 81470a2074fa8780320ea5fe4102807cb7118178
   SwiftSpinner: f9b59477fe107427f2b5b835497d6636fa167ede
 
-PODFILE CHECKSUM: 6c4ab2a0024635c78a5b4f4f4bd358303ec9bef7
+PODFILE CHECKSUM: a888d19b2c617a10365366cec865123faeed4c77
 
 COCOAPODS: 1.10.0

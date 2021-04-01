@@ -2,9 +2,9 @@
 # platform :ios, '11.0'
 
 target 'CurrencyExchange' do
+use_modular_headers!
 	pod "SwiftSpinner"
     	pod 'RxSwift', '~> 5'
-    	pod 'RxCocoa', '~> 5'
-	pod 'Bond'
-	pod 'ReactiveKit'
+	pod 'RxCocoa', '~> 5'
+	pod 'RealmS', '~> 4.0.0'
 end

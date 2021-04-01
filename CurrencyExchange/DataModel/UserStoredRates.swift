@@ -9,6 +9,6 @@ import Foundation
 
 class UserStoredRates {
     
-    static var userStoredRates: [Rate] = []
+    static var userStoredRatesData = [RateObject]()
     
 }

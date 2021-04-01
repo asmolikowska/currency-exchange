@@ -20,7 +20,6 @@
 		5BB8EAA92614C253002952A4 /* PrimaryViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5BB8EAA82614C253002952A4 /* PrimaryViewModel.swift */; };
 		5BB8EB0726152419002952A4 /* UserStoredRates.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5BB8EB0626152419002952A4 /* UserStoredRates.swift */; };
 		5BB8EB2726153302002952A4 /* CurrencyPickerViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5BB8EB2626153302002952A4 /* CurrencyPickerViewController.swift */; };
-		5BB8EB2C2615372A002952A4 /* CurrencyPickerViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5BB8EB2B2615372A002952A4 /* CurrencyPickerViewModel.swift */; };
 		A0757F5639E74BFB97B8589E /* libPods-CurrencyExchange.a in Frameworks */ = {isa = PBXBuildFile; fileRef = EC449C1855701F063292BCE3 /* libPods-CurrencyExchange.a */; };
 /* End PBXBuildFile section */
 
@@ -63,7 +62,6 @@
 		5BB8EAA82614C253002952A4 /* PrimaryViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PrimaryViewModel.swift; sourceTree = "<group>"; };
 		5BB8EB0626152419002952A4 /* UserStoredRates.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserStoredRates.swift; sourceTree = "<group>"; };
 		5BB8EB2626153302002952A4 /* CurrencyPickerViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CurrencyPickerViewController.swift; sourceTree = "<group>"; };
-		5BB8EB2B2615372A002952A4 /* CurrencyPickerViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CurrencyPickerViewModel.swift; sourceTree = "<group>"; };
 		EC449C1855701F063292BCE3 /* libPods-CurrencyExchange.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-CurrencyExchange.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
@@ -160,7 +158,7 @@
 		5BB8EA8D2614AE00002952A4 /* CurrencyCounter */ = {
 			isa = PBXGroup;
 			children = (
-				5BB8EA962614B274002952A4 /* ViewController */,
+				5BB8EA962614B274002952A4 /* ViewControllers */,
 				5BB8EA952614B26B002952A4 /* ViewModel */,
 			);
 			path = CurrencyCounter;
@@ -179,18 +177,17 @@
 			isa = PBXGroup;
 			children = (
 				5BB8EA972614B2AD002952A4 /* CurrencyCounterViewModel.swift */,
-				5BB8EB2B2615372A002952A4 /* CurrencyPickerViewModel.swift */,
 			);
 			path = ViewModel;
 			sourceTree = "<group>";
 		};
-		5BB8EA962614B274002952A4 /* ViewController */ = {
+		5BB8EA962614B274002952A4 /* ViewControllers */ = {
 			isa = PBXGroup;
 			children = (
 				5B2660EC2613AA4E0010CEA1 /* CurrencyCounterViewController.swift */,
 				5BB8EB2626153302002952A4 /* CurrencyPickerViewController.swift */,
 			);
-			path = ViewController;
+			path = ViewControllers;
 			sourceTree = "<group>";
 		};
 		5BB8EAA72614C242002952A4 /* BaseFiles */ = {
@@ -378,7 +375,6 @@
 				5BB8EB2726153302002952A4 /* CurrencyPickerViewController.swift in Sources */,
 				5BB8EAA92614C253002952A4 /* PrimaryViewModel.swift in Sources */,
 				5B2661232613B0F30010CEA1 /* CurrencyApiManager.swift in Sources */,
-				5BB8EB2C2615372A002952A4 /* CurrencyPickerViewModel.swift in Sources */,
 				5BB8EB0726152419002952A4 /* UserStoredRates.swift in Sources */,
 				5BB8EA982614B2AD002952A4 /* CurrencyCounterViewModel.swift in Sources */,
 				5BB8EA762613C024002952A4 /* ExchangeRatesData.swift in Sources */,

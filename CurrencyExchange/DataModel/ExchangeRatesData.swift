@@ -6,6 +6,7 @@
 //
 
 import Foundation
+import RealmSwift
 
 struct ExchangeRatesData: Decodable {
     let base: String
@@ -22,7 +23,23 @@ struct ExchangeRatesData: Decodable {
     }
 }
 
-struct Rate {
+struct Rate: Codable {
     let currency: String
     let value: Decimal
+}
+
+class RateObject : Object {
+    @objc private dynamic var structData: Data? = nil
+    
+    var rate : Rate? {
+        get {
+            if let data = structData {
+                return try? JSONDecoder().decode(Rate.self, from: data)
+            }
+            return nil
+        }
+        set {
+            structData = try? JSONEncoder().encode(newValue)
+        }
+    }
 }
