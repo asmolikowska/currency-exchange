@@ -41,20 +41,6 @@ class CurrencyCounterViewModel: PrimaryViewModel {
         reloadLst.accept(true)
     }
     
-    //    func saveCurrency(name: String) {
-    //        getUserStoredRatesData()
-    //        if let realm = realm {
-    //            if !isAlreadyInDatabase(for: name) {
-    //                try? realm.write {
-    //                    let rateObjectEUR = RateObject()
-    //                    rateObjectEUR.rate = Rate(currency: name, value: 0.0)
-    //                    realm.add(rateObjectEUR)
-    //                }
-    //            }
-    //        }
-    //        refresh()
-    //    }
-    
     func isAlreadyStoredCurrency(for name: String) -> Bool {
         let defaults = UserDefaults.standard
         if let defaultCurrency = defaults.array(forKey: "Currencies") as? [String] {
@@ -70,7 +56,7 @@ class CurrencyCounterViewModel: PrimaryViewModel {
     func setPrimaryCurrencies() {
         let defaults = UserDefaults.standard
         if !defaults.bool(forKey: "IsCurrencyArrayInit") {
-            defaults.set(["USD", "EUR", "GBP", "CAD"], forKey: "Currencies")
+            defaults.set(["USD", "PLN", "GBP", "CAD"], forKey: "Currencies")
             defaults.set(true, forKey: "IsCurrencyArrayInit")
         }
         refresh()
