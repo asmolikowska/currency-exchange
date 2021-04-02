@@ -35,7 +35,7 @@ class CurrencyApiManager {
                 let rate = Rate(currency: value, value: key)
                 ratesArray.append(rate)
             }
-            return DataConverted(base: decodedData.base, date: decodedData.date, rates: ratesArray)
+            return DataConverted(base: decodedData.base, date: decodedData.date, rates: ratesArray, filteredRates: [])
         } catch {
             print(error)
             return nil

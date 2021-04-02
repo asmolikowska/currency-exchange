@@ -7,26 +7,34 @@
 
 import Foundation
 
-struct DataConverted {
+class DataConverted {
     let base: String
     let date: String
     let rates: [Rate]
-    var filteredRates: [Rate] {
-        get {
-            var filteredRates = [Rate]()
-            let defaults = UserDefaults.standard
-            if defaults.array(forKey: "Currencies") != nil {
-                for rate in self.rates {
-                    for value in defaults.array(forKey: "Currencies") as! [String] {
-                        if rate.currency == value {
-                            filteredRates.append(rate)
-                        }
+    var filteredRates: [Rate]
+    
+    init(base: String, date: String, rates: [Rate], filteredRates: [Rate]) {
+        self.base = base
+        self.date = date
+        self.rates = rates
+        self.filteredRates = filteredRates
+        initializeFiltered()
+    }
+    
+    func initializeFiltered() {
+        var filteredRates = [Rate]()
+        let defaults = UserDefaults.standard
+        if defaults.array(forKey: "Currencies") != nil {
+            for rate in self.rates {
+                for value in defaults.array(forKey: "Currencies") as! [String] {
+                    if rate.currency == value {
+                        filteredRates.append(rate)
                     }
-                    
                 }
+                
             }
-            return filteredRates
         }
+        self.filteredRates = filteredRates
     }
 }
 

@@ -106,15 +106,7 @@ class CurrencyCounterViewModel: PrimaryViewModel {
         return "EUR"
     }
     
-//    func deleteCurrencyFromUserDefaults() -> String {
-//        let defaults = UserDefaults.standard
-//        if let defaultCurrency = defaults.array(forKey: "Currencies") as? [String] {
-//            for value in defaultCurrency {
-//                if
-//            }
-//        }
-//        return "EUR"
-//    }
+    
     
     func getConvertedAmountToStr(targetToEURRate: Double, numberToConvert: Double) -> Double {
         let inputToEURRate = getCurrencyDefaultValue()
