@@ -106,7 +106,7 @@ extension CurrencyPickerViewController: UITableViewDataSource {
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         let currencyName = currencyList.cellForRow(at: indexPath)?.textLabel?.text
         if let name = currencyName {
-            viewModel.saveCurrency(name: name)
+            viewModel.setCurrenciesToUserDefaults(currency: name)
         }
         self.navigationController?.popViewController(animated: true)
     }

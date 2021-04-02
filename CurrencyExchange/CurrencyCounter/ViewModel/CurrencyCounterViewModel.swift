@@ -8,8 +8,6 @@
 import Foundation
 import RxSwift
 import RxCocoa
-import RealmSwift
-import SwiftyJSON
 
 enum CurrencyCounterSection {
     case headerCounterSection
@@ -22,13 +20,9 @@ class CurrencyCounterViewModel: PrimaryViewModel {
     var shouldDisplayActivityIndicator = BehaviorRelay<Bool>(value: false)
     var showErrorMessageContent = BehaviorRelay<String?>(value: nil)
     var reloadLst = BehaviorRelay<Bool>(value: false)
-    private var realm = try? Realm()
     var currencyApiManager = CurrencyApiManager()
     var dataConverted: DataConverted?
     var sections: [CurrencyCounterSection] = [.headerCounterSection , .currencies, .addMoreCurrencies]
-    var userStoredRatesData = StoredRates.userStoredRatesData
-    var reloadDefaultCurrencyCell = BehaviorRelay<Bool>(value: false)
-    let group = DispatchGroup()
     
     func getDashboardData(completion: @escaping() -> Void) {
         shouldDisplayActivityIndicator.accept(true)
@@ -41,34 +35,31 @@ class CurrencyCounterViewModel: PrimaryViewModel {
         }
     }
     
-    func getUserStoredRatesData() {
-        if let realm = realm {
-            userStoredRatesData = realm.objects(RateObject.self).map({ $0 })
-        }
-    }
+
     
     func refresh() {
         reloadLst.accept(true)
     }
     
-    func saveCurrency(name: String) {
-        getUserStoredRatesData()
-        if let realm = realm {
-            if !isAlreadyInDatabase(for: name) {
-                try? realm.write {
-                    let rateObjectEUR = RateObject()
-                    rateObjectEUR.rate = Rate(currency: name, value: 0.0)
-                    realm.add(rateObjectEUR)
-                }
-            }
-        }
-        refresh()
-    }
+//    func saveCurrency(name: String) {
+//        getUserStoredRatesData()
+//        if let realm = realm {
+//            if !isAlreadyInDatabase(for: name) {
+//                try? realm.write {
+//                    let rateObjectEUR = RateObject()
+//                    rateObjectEUR.rate = Rate(currency: name, value: 0.0)
+//                    realm.add(rateObjectEUR)
+//                }
+//            }
+//        }
+//        refresh()
+//    }
     
-    func isAlreadyInDatabase(for name: String) -> Bool {
-        if let realm = realm {
-            for object in realm.objects(RateObject.self) {
-                if object.rate?.currency == name {
+    func isAlreadyStoredCurrency(for name: String) -> Bool {
+        let defaults = UserDefaults.standard
+        if let defaultCurrency = defaults.array(forKey: "Currencies") as? [String] {
+            for value in defaultCurrency {
+                if value == name {
                     return true
                 }
             }
@@ -76,39 +67,11 @@ class CurrencyCounterViewModel: PrimaryViewModel {
         return false
     }
     
-    func deleteCurrency(object: RateObject) {
-        getUserStoredRatesData()
-        if let realm = realm {
-            realm.beginWrite()
-            realm.delete(object)
-            try? realm.commitWrite()
-        }
-        refresh()
-    }
-    
     func setPrimaryCurrencies() {
         let defaults = UserDefaults.standard
-        if !defaults.bool(forKey: "IsRealmInitialized") {
-            if let realm = realm {
-                try? realm.write {
-                    let rateObjectEUR = RateObject()
-                    rateObjectEUR.rate = Rate(currency: "PLN", value: 0.0)
-                    realm.add(rateObjectEUR)
-                    
-                    let rateObjectUSD = RateObject()
-                    rateObjectUSD.rate = Rate(currency: "USD", value: 0.0)
-                    realm.add(rateObjectUSD)
-                    
-                    let rateObjectCAD = RateObject()
-                    rateObjectCAD.rate = Rate(currency: "CAD", value: 0.0)
-                    realm.add(rateObjectCAD)
-                    
-                    let rateObjectGBP = RateObject()
-                    rateObjectGBP.rate = Rate(currency: "GBP", value: 0.0)
-                    realm.add(rateObjectGBP)
-                }
-            }
-            defaults.set(true, forKey: "IsRealmInitialized")
+        if !defaults.bool(forKey: "IsCurrencyArrayInit") {
+            defaults.set(["USD", "EUR", "GBP", "CAD"], forKey: "Currencies")
+            defaults.set(true, forKey: "IsCurrencyArrayInit")
         }
         refresh()
     }
@@ -118,32 +81,48 @@ class CurrencyCounterViewModel: PrimaryViewModel {
         if defaults.string(forKey: "Currency") != nil {
             defaults.set(currency, forKey: "Currency")
         } else {
-            defaults.set("EUR", forKey: "Currency")
+            defaults.set("PLN", forKey: "Currency")
         }
         self.reloadLst.accept(true)
     }
     
+    func setCurrenciesToUserDefaults(currency: String) {
+        let defaults = UserDefaults.standard
+        if defaults.array(forKey: "Currencies") != nil {
+            var array = [String]()
+            let saved = defaults.array(forKey: "Currencies") as! [String]
+            array = saved
+            array.append(currency)
+            defaults.set(array, forKey: "Currencies")
+            refresh()
+        }
+    }
+    
     func getDefaultCurrencyFromUserDefaults() -> String {
-        group.enter()
         let defaults = UserDefaults.standard
         if let defaultCurrency = defaults.string(forKey: "Currency") {
-            group.leave()
             return defaultCurrency
         }
-        group.leave()
         return "EUR"
     }
     
+//    func deleteCurrencyFromUserDefaults() -> String {
+//        let defaults = UserDefaults.standard
+//        if let defaultCurrency = defaults.array(forKey: "Currencies") as? [String] {
+//            for value in defaultCurrency {
+//                if
+//            }
+//        }
+//        return "EUR"
+//    }
+    
     func getConvertedAmountToStr(targetToEURRate: Double, numberToConvert: Double) -> Double {
-        group.enter()
         let inputToEURRate = getCurrencyDefaultValue()
         let total = numberToConvert / inputToEURRate * targetToEURRate
-        group.leave()
         return total.rounded(toPlaces: 4)
     }
     
     func getCurrencyDefaultValue() -> Double {
-        group.enter()
         let defaultCurrency = self.getDefaultCurrencyFromUserDefaults()
         if let rates = self.dataConverted?.rates {
             for rate in rates {
@@ -152,7 +131,6 @@ class CurrencyCounterViewModel: PrimaryViewModel {
                 }
             }
         }
-        group.leave()
         return 0.0
     }
 }

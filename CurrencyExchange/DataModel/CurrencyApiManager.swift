@@ -24,19 +24,7 @@ class CurrencyApiManager {
             }
             task.resume()
         }
-    }
-    
-//    func parseData(exchangeRatesData: Data) -> ExchangeRatesData? {
-//        let decoder = JSONDecoder()
-//        do {
-//            let decodedData = try decoder.decode(ExchangeRatesData.self, from: exchangeRatesData)
-//            return ExchangeRatesData(base: decodedData.base, date: decodedData.date, rates: decodedData.rates)
-//        } catch {
-//            print(error)
-//            return nil
-//        }
-//    }
-    
+    }    
     
     func parsToConvertedeData(data: Data) -> DataConverted? {
         let decoder = JSONDecoder()
