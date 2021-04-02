@@ -8,35 +8,32 @@
 import Foundation
 import RealmSwift
 
+struct DataConverted {
+    let base: String
+    let date: String
+    let rates: [Rate]
+    var filteredRates: [Rate] {
+        get {
+            let realm = try? Realm()
+            var filteredRates = [Rate]()
+            if let realmUnwrapped = realm {
+                for rate in self.rates {
+                    for object in realmUnwrapped.objects(RateObject.self) {
+                        if rate.currency == object.rate?.currency {
+                            filteredRates.append(rate)
+                        }
+                    }
+                }
+            }
+            return filteredRates
+        }
+    }
+}
+
 struct ExchangeRatesData: Decodable {
     let base: String
     let date: String
     let rates: [String: Double]
-    
-    func getRates() -> [Rate] {
-        var ratesArray: [Rate] = []
-        for (value, key) in rates {
-            let rate = Rate(currency: value, value: key)
-            ratesArray.append(rate)
-        }
-        return ratesArray
-    }
-    
-    func getFilteredRates() -> [Rate] {
-        let rates = getRates()
-        let realm = try? Realm()
-        var filteredRates = [Rate]()
-        if let realmUnwrapped = realm {
-            for rate in rates {
-                for object in realmUnwrapped.objects(RateObject.self) {
-                    if rate.currency == object.rate?.currency {
-                        filteredRates.append(rate)
-                    }
-                }
-            }
-        }
-        return filteredRates
-    }
 }
 
 struct Rate: Codable {

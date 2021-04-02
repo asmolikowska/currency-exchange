@@ -50,7 +50,7 @@ class CurrencyCounterViewController: UIViewController, UITableViewDelegate, UITe
         setupCurrencyList()
         let group = DispatchGroup()
         group.enter()
-        viewModel.getData() {
+        viewModel.getDashboardData() {
             group.leave()
         }
     }
@@ -88,7 +88,7 @@ class CurrencyCounterViewController: UIViewController, UITableViewDelegate, UITe
         }.disposed(by: disposeBag)
         
         
-        numberToConvert.asObservable().delay(RxTimeInterval.seconds(1), scheduler: MainScheduler.instance).subscribe { [unowned self] value in
+        numberToConvert.asObservable().subscribe { [unowned self] value in
             self.currencyList.reloadSections([1], with: .none)
         }.disposed(by: disposeBag)
         
@@ -122,7 +122,7 @@ extension CurrencyCounterViewController: UITableViewDataSource {
         case .headerCounterSection:
             return 1
         case .currencies:
-            return viewModel.exchangeRatesData?.getFilteredRates().count ?? 33
+            return viewModel.dataConverted?.filteredRates.count ?? 5
         case .addMoreCurrencies:
             return 1
         }
@@ -137,9 +137,9 @@ extension CurrencyCounterViewController: UITableViewDataSource {
         case .currencies:
             let cell = CurrencyTableViewCell(style: .value1, reuseIdentifier: reuseId)
             cell.textLabel?.numberOfLines = 0
-            if let exchange = viewModel.exchangeRatesData {
-                cell.textLabel?.text =  exchange.getFilteredRates()[indexPath.row].currency
-                let convertedAmount = viewModel.getConvertedAmountToStr(targetToEURRate: exchange.getFilteredRates()[indexPath.row].value, numberToConvert: numberToConvert.value)
+            if let data = viewModel.dataConverted {
+                cell.textLabel?.text =  data.filteredRates[indexPath.row].currency
+                let convertedAmount = viewModel.getConvertedAmountToStr(targetToEURRate: data.filteredRates[indexPath.row].value, numberToConvert: numberToConvert.value)
                 cell.detailTextLabel?.text = "\(convertedAmount)"
             }
             return cell

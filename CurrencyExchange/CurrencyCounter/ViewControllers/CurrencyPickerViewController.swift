@@ -30,7 +30,7 @@ class CurrencyPickerViewController: UIViewController, UITableViewDelegate {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        viewModel.getData(){  }
+        viewModel.getDashboardData() { }
         bindActions()
         prepareView()
     }
@@ -91,14 +91,14 @@ extension CurrencyPickerViewController: UITableViewDataSource {
     }
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return viewModel.exchangeRatesData?.getRates().count ?? 33
+        return viewModel.dataConverted?.rates.count ?? 33
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = currencyList.dequeueReusableCell(withIdentifier: reuseId, for: indexPath)
         cell.textLabel?.numberOfLines = 0
-        if let exchange = viewModel.exchangeRatesData {
-            cell.textLabel?.text =  exchange.getRates()[indexPath.row].currency
+        if let data = viewModel.dataConverted {
+            cell.textLabel?.text =  data.rates[indexPath.row].currency
         }
         return cell
     }

@@ -24,20 +24,17 @@ class CurrencyCounterViewModel: PrimaryViewModel {
     var reloadLst = BehaviorRelay<Bool>(value: false)
     private var realm = try? Realm()
     var currencyApiManager = CurrencyApiManager()
-    var exchangeRatesData: ExchangeRatesData?
+    var dataConverted: DataConverted?
     var sections: [CurrencyCounterSection] = [.headerCounterSection , .currencies, .addMoreCurrencies]
-    var userStoredRatesData = UserStoredRates.userStoredRatesData
+    var userStoredRatesData = StoredRates.userStoredRatesData
     var reloadDefaultCurrencyCell = BehaviorRelay<Bool>(value: false)
-    var matchingData: ExchangeRatesData?
-    var filteredRates: [Rate]?
-    var rates: ExchangeRatesData?
     let group = DispatchGroup()
     
-    func getData(completion: @escaping() -> Void) {
+    func getDashboardData(completion: @escaping() -> Void) {
         shouldDisplayActivityIndicator.accept(true)
         currencyApiManager.performRequest { data in
             if let safeData = data {
-                self.exchangeRatesData = self.currencyApiManager.parseData(exchangeRatesData: safeData)
+                self.dataConverted = self.currencyApiManager.parsToConvertedeData(data: safeData)
                 self.reloadLst.accept(true)
                 self.shouldDisplayActivityIndicator.accept(false)
             }
@@ -148,7 +145,7 @@ class CurrencyCounterViewModel: PrimaryViewModel {
     func getCurrencyDefaultValue() -> Double {
         group.enter()
         let defaultCurrency = self.getDefaultCurrencyFromUserDefaults()
-        if let rates = self.exchangeRatesData?.getRates() {
+        if let rates = self.dataConverted?.rates {
             for rate in rates {
                 if rate.currency == defaultCurrency {
                     return rate.value

@@ -26,14 +26,32 @@ class CurrencyApiManager {
         }
     }
     
-    func parseData(exchangeRatesData: Data) -> ExchangeRatesData? {
+//    func parseData(exchangeRatesData: Data) -> ExchangeRatesData? {
+//        let decoder = JSONDecoder()
+//        do {
+//            let decodedData = try decoder.decode(ExchangeRatesData.self, from: exchangeRatesData)
+//            return ExchangeRatesData(base: decodedData.base, date: decodedData.date, rates: decodedData.rates)
+//        } catch {
+//            print(error)
+//            return nil
+//        }
+//    }
+    
+    
+    func parsToConvertedeData(data: Data) -> DataConverted? {
         let decoder = JSONDecoder()
+        var ratesArray: [Rate] = []
         do {
-            let decodedData = try decoder.decode(ExchangeRatesData.self, from: exchangeRatesData)
-            return ExchangeRatesData(base: decodedData.base, date: decodedData.date, rates: decodedData.rates)
+            let decodedData = try decoder.decode(ExchangeRatesData.self, from: data)
+            for (value, key) in decodedData.rates {
+                let rate = Rate(currency: value, value: key)
+                ratesArray.append(rate)
+            }
+            return DataConverted(base: decodedData.base, date: decodedData.date, rates: ratesArray)
         } catch {
             print(error)
             return nil
         }
     }
+
 }
