@@ -15,12 +15,14 @@ PODS:
     - RxSwift (~> 5)
   - RxSwift (5.1.1)
   - SwiftSpinner (2.2.0)
+  - SwiftyJSON (4.3.0)
 
 DEPENDENCIES:
   - RealmS (~> 4.0.0)
   - RxCocoa (~> 5)
   - RxSwift (~> 5)
   - SwiftSpinner
+  - SwiftyJSON (~> 4.0)
 
 SPEC REPOS:
   trunk:
@@ -32,6 +34,7 @@ SPEC REPOS:
     - RxRelay
     - RxSwift
     - SwiftSpinner
+    - SwiftyJSON
 
 SPEC CHECKSUMS:
   ObjectMapper: 97111c97e054a6ee25917662106689f0b4127b37
@@ -42,7 +45,8 @@ SPEC CHECKSUMS:
   RxRelay: d77f7d771495f43c556cbc43eebd1bb54d01e8e9
   RxSwift: 81470a2074fa8780320ea5fe4102807cb7118178
   SwiftSpinner: f9b59477fe107427f2b5b835497d6636fa167ede
+  SwiftyJSON: 6faa0040f8b59dead0ee07436cbf76b73c08fd08
 
-PODFILE CHECKSUM: a888d19b2c617a10365366cec865123faeed4c77
+PODFILE CHECKSUM: 18f52630fb40dcf2949a9b61839cee0cb8963bcf
 
 COCOAPODS: 1.10.0

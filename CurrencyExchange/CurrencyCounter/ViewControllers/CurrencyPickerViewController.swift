@@ -15,7 +15,6 @@ class CurrencyPickerViewController: UIViewController, UITableViewDelegate {
     
     let viewModel: CurrencyCounterViewModel
     var disposeBag = DisposeBag()
-    var defaultCurrency = "PLN"
     let currencyList = UITableView()
     let reuseId = "currencyCell"
     
@@ -31,12 +30,10 @@ class CurrencyPickerViewController: UIViewController, UITableViewDelegate {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        viewModel.getData()
+        viewModel.getData(){  }
         bindActions()
         prepareView()
     }
-    
-    
     
     override func loadView() {
         super.loadView()

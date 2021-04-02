@@ -17,6 +17,7 @@ class CurrencyCounterViewController: UIViewController, UITableViewDelegate, UITe
     let currencyList = UITableView(frame: .zero, style: .grouped)
     let reuseId = "currencyCell"
     var headerCell: HeaderCurrencyTableViewCell
+    var numberToConvert = BehaviorRelay<Double>(value: 1.0)
     
     
     init(viewModel: CurrencyCounterViewModel) {
@@ -47,7 +48,11 @@ class CurrencyCounterViewController: UIViewController, UITableViewDelegate, UITe
     override func loadView() {
         super.loadView()
         setupCurrencyList()
-        viewModel.getData()
+        let group = DispatchGroup()
+        group.enter()
+        viewModel.getData() {
+            group.leave()
+        }
     }
     
     func prepareView() {
@@ -82,6 +87,11 @@ class CurrencyCounterViewController: UIViewController, UITableViewDelegate, UITe
             }
         }.disposed(by: disposeBag)
         
+        
+        numberToConvert.asObservable().delay(RxTimeInterval.seconds(1), scheduler: MainScheduler.instance).subscribe { [unowned self] value in
+            self.currencyList.reloadSections([1], with: .none)
+        }.disposed(by: disposeBag)
+        
         viewModel.reloadLst.asObservable().subscribe { [unowned self] shouldReload in
             if let shouldReload = shouldReload.element {
                 DispatchQueue.main.async {
@@ -94,8 +104,8 @@ class CurrencyCounterViewController: UIViewController, UITableViewDelegate, UITe
         
         headerCell.currencyValue.rx.controlEvent([.editingChanged])
             .asObservable()
-            .subscribe(onNext: { _ in
-                print("editing state changed")
+            .subscribe(onNext: { [unowned self] in
+                self.numberToConvert.accept(Double(self.headerCell.currencyValue.text ?? "1") ?? 1)
             })
             .disposed(by: disposeBag)
     }
@@ -112,7 +122,6 @@ extension CurrencyCounterViewController: UITableViewDataSource {
         case .headerCounterSection:
             return 1
         case .currencies:
-            //            return viewModel.userStoredRatesData.count
             return viewModel.exchangeRatesData?.getFilteredRates().count ?? 33
         case .addMoreCurrencies:
             return 1
@@ -130,7 +139,8 @@ extension CurrencyCounterViewController: UITableViewDataSource {
             cell.textLabel?.numberOfLines = 0
             if let exchange = viewModel.exchangeRatesData {
                 cell.textLabel?.text =  exchange.getFilteredRates()[indexPath.row].currency
-                cell.detailTextLabel?.text = "\(exchange.getFilteredRates()[indexPath.row].value)"
+                let convertedAmount = viewModel.getConvertedAmountToStr(targetToEURRate: exchange.getFilteredRates()[indexPath.row].value, numberToConvert: numberToConvert.value)
+                cell.detailTextLabel?.text = "\(convertedAmount)"
             }
             return cell
         case .addMoreCurrencies:
@@ -146,7 +156,6 @@ extension CurrencyCounterViewController: UITableViewDataSource {
         case .addMoreCurrencies:
             self.navigationController?.pushViewController(CurrencyPickerViewController(viewModel: viewModel), animated: true)
         case .currencies:
-            // to mozna reaktywnie
             headerCell.textLabel?.text = currencyList.cellForRow(at: indexPath)?.textLabel?.text
             viewModel.setDefaultCurrencyToUserDefaults(currency: currencyList.cellForRow(at: indexPath)?.textLabel?.text ?? "EUR")
             currencyList.deselectRow(at: indexPath, animated: true)
@@ -182,12 +191,4 @@ extension CurrencyCounterViewController: UITableViewDataSource {
             return false
         }
     }
-    
-    override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
-        headerCell.currencyValue.endEditing(true)
-        headerCell.currencyValue.resignFirstResponder()
-    }
-    
-    
 }
-
