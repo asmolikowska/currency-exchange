@@ -28,32 +28,32 @@ class CurrencyCounterViewModel: PrimaryViewModel {
         shouldDisplayActivityIndicator.accept(true)
         currencyApiManager.performRequest { data in
             if let safeData = data {
-                self.dataConverted = self.currencyApiManager.parsToConvertedeData(data: safeData)
+                self.dataConverted = self.currencyApiManager.parseToConvertedeData(data: safeData)
                 self.reloadLst.accept(true)
                 self.shouldDisplayActivityIndicator.accept(false)
             }
         }
     }
     
-
+    
     
     func refresh() {
         reloadLst.accept(true)
     }
     
-//    func saveCurrency(name: String) {
-//        getUserStoredRatesData()
-//        if let realm = realm {
-//            if !isAlreadyInDatabase(for: name) {
-//                try? realm.write {
-//                    let rateObjectEUR = RateObject()
-//                    rateObjectEUR.rate = Rate(currency: name, value: 0.0)
-//                    realm.add(rateObjectEUR)
-//                }
-//            }
-//        }
-//        refresh()
-//    }
+    //    func saveCurrency(name: String) {
+    //        getUserStoredRatesData()
+    //        if let realm = realm {
+    //            if !isAlreadyInDatabase(for: name) {
+    //                try? realm.write {
+    //                    let rateObjectEUR = RateObject()
+    //                    rateObjectEUR.rate = Rate(currency: name, value: 0.0)
+    //                    realm.add(rateObjectEUR)
+    //                }
+    //            }
+    //        }
+    //        refresh()
+    //    }
     
     func isAlreadyStoredCurrency(for name: String) -> Bool {
         let defaults = UserDefaults.standard
@@ -88,14 +88,13 @@ class CurrencyCounterViewModel: PrimaryViewModel {
     
     func setCurrenciesToUserDefaults(currency: String) {
         let defaults = UserDefaults.standard
-        if defaults.array(forKey: "Currencies") != nil {
-            var array = [String]()
-            let saved = defaults.array(forKey: "Currencies") as! [String]
-            array = saved
-            array.append(currency)
-            defaults.set(array, forKey: "Currencies")
-            refresh()
-        }
+        var array = [String]()
+        let saved = defaults.array(forKey: "Currencies") as! [String]
+        array = saved
+        array.append(currency)
+        defaults.set(array, forKey: "Currencies")
+        self.dataConverted?.initializeFiltered()
+        refresh()
     }
     
     func getDefaultCurrencyFromUserDefaults() -> String {
@@ -105,8 +104,6 @@ class CurrencyCounterViewModel: PrimaryViewModel {
         }
         return "EUR"
     }
-    
-    
     
     func getConvertedAmountToStr(targetToEURRate: Double, numberToConvert: Double) -> Double {
         let inputToEURRate = getCurrencyDefaultValue()

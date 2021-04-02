@@ -26,7 +26,7 @@ class CurrencyApiManager {
         }
     }    
     
-    func parsToConvertedeData(data: Data) -> DataConverted? {
+    func parseToConvertedeData(data: Data) -> DataConverted? {
         let decoder = JSONDecoder()
         var ratesArray: [Rate] = []
         do {
@@ -34,6 +34,9 @@ class CurrencyApiManager {
             for (value, key) in decodedData.rates {
                 let rate = Rate(currency: value, value: key)
                 ratesArray.append(rate)
+            }
+            ratesArray.sort { (a, b) -> Bool in
+                a.currency < b.currency
             }
             return DataConverted(base: decodedData.base, date: decodedData.date, rates: ratesArray, filteredRates: [])
         } catch {

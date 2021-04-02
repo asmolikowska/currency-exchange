@@ -34,6 +34,9 @@ class DataConverted {
                 
             }
         }
+        filteredRates.sort { (a, b) -> Bool in
+            a.currency < b.currency
+        }
         self.filteredRates = filteredRates
     }
 }
