@@ -1,4 +1,4 @@
-# currency-exchange
+# Currency exchange app
 
 Simple currency converter app  which supports conversion of exchange rates of the most popular currencies. 
 
