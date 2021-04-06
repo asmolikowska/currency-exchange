@@ -1,13 +1,4 @@
 PODS:
-  - ObjectMapper (3.5.3)
-  - Realm (3.21.0):
-    - Realm/Headers (= 3.21.0)
-  - Realm/Headers (3.21.0)
-  - RealmS (4.0.1):
-    - ObjectMapper (~> 3.0)
-    - RealmSwift (~> 3.0)
-  - RealmSwift (3.21.0):
-    - Realm (= 3.21.0)
   - RxCocoa (5.1.1):
     - RxRelay (~> 5)
     - RxSwift (~> 5)
@@ -15,38 +6,25 @@ PODS:
     - RxSwift (~> 5)
   - RxSwift (5.1.1)
   - SwiftSpinner (2.2.0)
-  - SwiftyJSON (4.3.0)
 
 DEPENDENCIES:
-  - RealmS (~> 4.0.0)
   - RxCocoa (~> 5)
   - RxSwift (~> 5)
   - SwiftSpinner
-  - SwiftyJSON (~> 4.0)
 
 SPEC REPOS:
   trunk:
-    - ObjectMapper
-    - Realm
-    - RealmS
-    - RealmSwift
     - RxCocoa
     - RxRelay
     - RxSwift
     - SwiftSpinner
-    - SwiftyJSON
 
 SPEC CHECKSUMS:
-  ObjectMapper: 97111c97e054a6ee25917662106689f0b4127b37
-  Realm: 38e9dcb19104b58407167d99f70d4995f7c16023
-  RealmS: a5ce0e34359676b6d52778dab92c4e36b779bbd9
-  RealmSwift: 3183cc1ad48378fbcd634311b22c0e6c44021152
   RxCocoa: 32065309a38d29b5b0db858819b5bf9ef038b601
   RxRelay: d77f7d771495f43c556cbc43eebd1bb54d01e8e9
   RxSwift: 81470a2074fa8780320ea5fe4102807cb7118178
   SwiftSpinner: f9b59477fe107427f2b5b835497d6636fa167ede
-  SwiftyJSON: 6faa0040f8b59dead0ee07436cbf76b73c08fd08
 
-PODFILE CHECKSUM: 18f52630fb40dcf2949a9b61839cee0cb8963bcf
+PODFILE CHECKSUM: 6cb38ccc4379facdc1160b88540f6f72f1b61d02
 
 COCOAPODS: 1.10.0
