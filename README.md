@@ -10,3 +10,6 @@ Data is fetched from Exchange rates API using URLSession.
 - Adding a new currency to the list 
 - Converting currencies
 
+<p align="center">
+  <img src="https://github.com/asmolikowska/currency-exchange/blob/main/presentation.gif" height="600" />
+</p>
